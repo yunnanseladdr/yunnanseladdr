@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd     http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<context:component-scan base-package="com.sinovate.ngrms.pahdx.svrinter.mapseladdr"/>
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:app-cfg.properties"/>
+	</bean>
+
+	<bean id="adminDivisionSvc" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.impl.AdminDivisionSvcImpl" init-method="init"/>
+
+	<import resource="datasource.xml"/>
+
+	<task:executor id="worker" pool-size="0-8"  queue-capacity="16" rejection-policy="CALLER_RUNS"  keep-alive="1" />
+
+	<bean id="esclientFactor" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.das.elastic.ElasticClientFactory" destroy-method="destroy">
+		<property name="clusterList" >
+			<util:list list-class="java.util.LinkedList">
+				<value>${clusterList1}</value>
+				<!--<value>${clusterList2}</value>-->
+			</util:list>
+		</property>
+	</bean>
+
+	<bean id="esclient" factory-bean="esclientFactor" factory-method="getClient">
+		<constructor-arg value="${clusterName}"/>
+	</bean>
+	<bean id="databaseNameConverter" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.support.DatabaseNameConverter" c:dbNamePrefix="${dbNamePrefix}"/>
+	<bean id="addressSegmenter" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.util.aws.AddressSegmenterImpl" c:useAppWordSegment="${useAppWordSegment}" c:addressUnits="${util.addressUnits}"/>
+	<bean id="simpleSqlSvc" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.das.dao.impl.SimpleSqlSvc">
+		<property name="queryGridInfoSql" value="${queryGridInfoSql}"/>
+		<property name="queryNearGridSql" value="${queryNearGridSql}"/>
+		<property name="queryXqtInfoSql" value="${queryXqtInfoSql}" />
+		<property name="queryGridIdByAddrIdsql" value="${queryGridIdByAddrIdsql}" />
+		<property name="queryProjInfoByGridIdSql" value="${queryProjInfoByGridIdSql}" />
+		<property name="queryTelByGridIdSql" value="${queryTelByGridIdSql}" />
+		<property name="queryChangeAddrSQL" value="${queryChangeAddrSQL}"/>
+		<property name="QRY_AREA_INFO1" value="${queryAreaInfoSql}"/>
+		<property name="QRY_SUBAREA_INFO1" value="${querySubAreaInfoByAreaIdSql}"/>
+		<property name="QRY_QU_INFO1" value="${queryQuBySubAreaIdSql}"/>
+		<property name="QRY_STRTOWM_INFO2" value="${queryStreetOrTownByCenterSubAreaSql}"/>
+		<property name="QRY_STRTOWN_INFO1" value="${queryStreetOrTownByCountyAreaSql}"/>
+		<property name="QRY_ADDR_NOSUB" value="${queryAddrSql}"/>
+		<property name="QRY_89ADDR_NAME" value="${querySugAddrSql}"/>
+		<property name="QRY_ADDR_SITE" value="${queryAddrSitesSql}"/>
+		<property name="queryMaxIdCdcCommSql" value="${queryMaxIdCdcCommSql}"/>
+		<property name="delCdcCommSql" value="${delCdcCommSql}"/>
+		<property name="queryCommUserAddrSql" value="${queryCommUserAddrSql}"/>
+		<property name="queryCommSuggAddrsql" value="${queryCommSuggAddrsql}"/>
+		<property name="queryDeleteCdcRmAddrSql" value="${queryDeleteCdcRmAddrSql}"/>
+		<property name="queryDeleteCdcReAddrSql" value="${queryDeleteCdcReAddrSql}"/>
+		<property name="queryDeleteNexusSuggSql" value="${queryDeleteNexusSuggSql}" />
+		<property name="queryNexusSuggAddrsql" value="${queryNexusSuggAddrsql}" />
+	</bean>
+
+	<bean id="fullTextSearcherImplByElastic" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.das.elastic.FullTextSearcherImplByElastic">
+		<property name="highlightedfield" value="${highlightedfield}"/>
+		<property name="weightFieldList" value="${weightFieldList}"/>
+
+
+	</bean>
+
+	<bean id="psSuggestAddrSvcImpl" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.impl.PsSuggestAddrSvcImpl">
+		<property name="suggtablename" value = "${suggtablename}"/>
+		<property name="suggname" value="${suggname}"/>
+		<property name="sugghighlighttext" value="${sugghighlighttext}"/>
+		<property name="suggid" value="${suggid}"/>
+		<property name="suggnamebak" value="${suggnamebak}"/>
+		<property name="suggsubnames" value="${suggsubnames}"/>
+	</bean>
+
+	<bean id="psUserAddrSvcImpl" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.impl.PsUserAddrSvcImpl">
+		<property name="usertablename" value="${usertablename}"/>
+		<property name="useroldid" value="${useroldid}"/>
+		<property name="username" value="${username}"/>
+		<property name="userhighlighttext" value="${userhighlighttext}"/>
+		<property name="useroldsubareaid" value="${useroldsubareaid}"/>
+		<property name="usersubareaname" value="${usersubareaname}"/>
+		<property name="usersites" value="${usersites}"/>
+	</bean>
+
+	<bean id="psNearSearchSvcImpl" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.impl.PsNearSearchSvcImpl" />
+
+	<bean id="getXqtInfoSvcImpl" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.impl.GetXqtInfoSvcImpl" />
+
+	<bean id="addrSchWsSvcImpl" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.aui.ws.AddrSchWsSvcImpl" init-method="initSubAreaMap"/>
+
+	<bean id="getMapInfo" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.support.GetMapInfo" init-method="init"/>
+
+
+</beans>

@@ -1,0 +1,238 @@
+body, div, h1, h2, h3, h4, h5, h6, hr, a, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, table, tbody, th, td, tr {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: sans-serif;
+}
+em {
+    font-style: normal;
+}
+body, html, #container, #allmap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: "微软雅黑", sans-serif;
+}
+
+/*遮蔽层*/
+#mask {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    z-index: 77;
+}
+
+/*地图*/
+#allmap {
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/*地图搜索框*/
+#mapSearchDiv {
+    height: 7%;
+    width: 94%;
+    position: absolute;
+    top: 2%;
+    left: 3%;
+    z-index: 1;
+    box-shadow: 3px 3px 10px 2px #aaa;
+    background-color: #fff;
+}
+
+#mapSearchInput {
+    height: 100%;
+    width: 79%;
+    border: 0;
+    position: relative;
+    float: left;
+    padding: 0 0 0 1%;
+    line-height: 100%;
+    vertical-align: middle;
+    font-size: 1em;
+}
+
+#mapSearchButton {
+    height: 100%;
+    width: 20%;
+    border: 0;
+    background-color: #6bb1f7;
+    color: #fff;
+    position: relative;
+    float: right;
+    font-size: 0.9em;
+}
+
+/*网格展示部分*/
+#gridShowDiv {
+    height: 20%;
+    width: 94%;
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    background-color: #fff;
+    box-shadow: 3px 3px 10px 2px #aaa;
+    padding: 0 3%;
+}
+
+#gridInfo {
+    display: block;
+    padding-top: 2%;
+    color: #777;
+    font-size: 0.95em;
+}
+
+#xqGrid {
+    display: block;
+    padding-bottom: 1%;
+    background: url("../images/zoom.png") no-repeat 0 0;
+    text-indent: 24px;
+    font-size: 0.95em;
+}
+
+#detail {
+    padding-left: 10px;
+    color: #6bb1f7;
+    font-size: 0.97em;
+}
+
+#mapTelPrompt {
+font-size: 0.95em;
+color: #777;
+}
+
+#changePoiPrompt {
+color: #777;
+font-size: 0.8em;
+display: block;
+position: absolute;
+bottom: 3%;
+}
+
+/*点击网格名称后续展示部分*/
+
+#subAddr, #userAddr, #ability, #userCommit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 2;
+}
+
+#userCommit {
+    z-index: 3;
+}
+
+#subAddrHead, #userAddrHead, #abilityHead, #userCommitHead {
+    height: 7%;
+    border-bottom: 1px #ccc solid;
+}
+
+#back1, #back2, #back3, #back4 {
+    width: 20%;
+    height: 100%;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    background-color: #6bb1f7;
+    font-size: 1.2em;
+    font-weight: bolder;
+}
+
+#back1:hover, #back2:hover, #back3:hover, #back4:hover {
+    background-color: skyblue;
+}
+
+#subAddrContent, #userAddrContent, #abilityContent, #userCommitContent {
+    padding: 3%;
+    height: 85%;
+    overflow: scroll;
+}
+
+div#citySearchPanel, div#countrySearchPanel, div#userAddSearchPanel {
+    width: 100%;
+    height: 6%;
+}
+
+input#city9LSearch, input#country9LSearch, input#userAddrSearch, input#addrResAbil, input#userInputAd {
+    width: 78%;
+    height: 100%;
+    font-size: 0.9em;
+    color: #555;
+    background-color: #efefef;
+    padding-left: 2%;
+}
+input#addrResAbil {
+    width: 93%;
+}
+
+button#city9LSearchButton, button#country9LSearchButton, button#userAddrSearchButton, button#sbmitAd, button#userCommitButton {
+    background-color: #6bb1f7;
+    height: 100%;
+    width: 19%;
+    padding: 0;
+    font-size: 0.9em;
+    color: #fff;
+}
+
+ul#buildingList li, ul#buildingList2 li, ul#userAddList li {
+    display: block;
+    padding: 1% 3%;
+    border-bottom: 1px dashed #efefef;
+}
+
+ul#buildingList li:hover, ul#buildingList2 li:hover, ul#userAddList li:hover {
+    background-color: #efefef;
+}
+
+#userAddPrompt {
+    width: 100%;
+    height: 3%;
+    font-size: 0.8em;
+    color: #777;
+    text-decoration: underline;
+    position: absolute;
+    bottom: 1%;
+    background-color: #fff;
+    z-index: 7;
+    text-align: center;
+}
+
+#userAddPrompt:hover {
+    color: #6bb1f7;
+}
+
+.rowName {
+    color: #aaa;
+    width: 40%;
+}
+
+table#resAbility {
+    margin-top: 10%;
+    margin-bottom: 3%;
+    border-left: 1px solid #eee;
+    border-top: 1px solid #eee;
+    width: 80%;
+}
+
+table#resAbility td {
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+    padding: 1%;
+}
+
+p.mapAbiPrompt {
+    font-size: 0.9em;
+    color: #aaa;
+}
+

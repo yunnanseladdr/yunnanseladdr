@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+       <context:component-scan base-package="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.aui"></context:component-scan>
+       <mvc:annotation-driven>
+              <mvc:message-converters>
+                     <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                            <property name="writeAcceptCharset" value="false"/>
+                            <property name="supportedMediaTypes">
+                                   <list>
+                                          <value>text/html;charset=UTF-8</value>
+                                          <value>text/plain;charset=UTF-8</value>
+                                   </list>
+                            </property>
+                     </bean>
+                     <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+                     <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+                     <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+                     <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+                     <bean class="com.sinovate.ngrms.comm.ptfcore.frmwork.spring.converter.MappingFastJsonHttpMessageConverter"/>
+              </mvc:message-converters>
+       </mvc:annotation-driven>
+
+       <!-- 默认根路径下访问的jsp -->
+       <mvc:view-controller path="/" view-name="search"/>
+       <mvc:view-controller path="/addrsearch" view-name="search"/>
+       <mvc:view-controller path="/app" view-name="app"/>
+       <mvc:view-controller path="/proxy" view-name="proxy"/>
+       <mvc:view-controller path="/testjsonp" view-name="testjsonp"/>
+       <mvc:view-controller path="/mobileSearch" view-name="mobileSearch"/>
+
+
+       <!-- SpringMvc拦截了所有的请求，所以要设置静态资源访问，使项目能够访问文件夹下的js和jsp -->
+       <mvc:resources mapping="/apps/**" location="/apps/"/>
+
+       <mvc:default-servlet-handler/>
+       <!-- 视图解析器   解析为/WEB-INF/views/路径下的jsp-->
+       <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+              <property name="ignoreAcceptHeader" value="true"/>
+              <property name="defaultContentType" value="text/html"/>
+              <property name="mediaTypes">
+                     <map>
+                            <entry key="xls" value="application/vnd.ms-excel" />
+                            <entry key="csv" value="application/csv" />
+                            <entry key="json" value="application/json" />
+                            <entry key="xml" value="application/xml" />
+                     </map>
+              </property>
+              <property name="viewResolvers">
+                     <list>
+                            <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+                            <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+                                  p:prefix="/WEB-INF/views/" p:suffix=".jsp"/>
+                     </list>
+              </property>
+              <property name="defaultViews">
+                     <list>
+                            <bean class="com.sinovate.ngrms.comm.ptfcore.frmwork.spring.web.MappingFastJsonView" />
+                            <bean class="com.sinovate.ngrms.comm.ptfcore.frmwork.spring.web.CSVView" />
+                     </list>
+              </property>
+       </bean>
+       <mvc:interceptors>
+              <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+       </mvc:interceptors>
+
+       <!-- Saves a locale change using a cookie -->
+       <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+
+
+</beans>

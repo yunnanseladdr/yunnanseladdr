@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="com.sinovate.ngrms.pahdx.svrinter.mapseladdr">
+		<level value = "DEBUG"/>
+	</logger>
+	
+	<logger name="org.springframework">
+		<level value="DEBUG"/>
+	</logger>
+	
+	<logger name="com.alibaba">
+		<level value="DEBUG"/>
+	</logger>
+	
+	<root>
+		<level value="DEBUG"/>
+		<appender-ref ref="CONSOLE"/>
+	</root>
+</configuration>

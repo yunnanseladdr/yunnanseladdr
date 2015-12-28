@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <import resource="classpath:app-context.xml"/>
+
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+    <!-- 每5分钟执行一次， cron格式为 秒、分、日、月、周、年 -->
+    <!--<task:scheduled-tasks>
+        <task:scheduled ref="changeCapturer" method="run" cron="0 0/5 * * * *"/>
+    </task:scheduled-tasks>-->
+
+    <!--分发网格表定时任务,每天14时执行-->
+    <!--<task:scheduled-tasks>
+        <task:scheduled ref="distributeGridInfo" method="run" cron="0 0 14 * * *"/>
+    </task:scheduled-tasks>-->
+
+    <!--分发报表定时任务,每周三,周日晚上执行-->
+    <!--<task:scheduled-tasks>
+        <task:scheduled ref="distributeReport" method="run" cron="0 13 23 ? * WED,SUN"/>
+    </task:scheduled-tasks>-->
+
+    <bean id="changeCapturer" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.aui.component.ChangeCapturer"/>
+    <bean id="distributeGridInfo" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.aui.component.DistributeGridInfo"/>
+    <bean id="distributeReport" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.aui.component.DistributeReport"/>
+    <!--<bean id="adminDivisionSvc" class="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.ps.impl.AdminDivisionSvcImpl" init-method="init"/>-->
+    <jaxws:server
+            serviceClass="com.sinovate.ngrms.pahdx.svrinter.mapseladdr.aui.ws.AddrSchWsSvc"
+            address="/sch/addr/queryResAddr">
+        <jaxws:serviceBean>
+            <ref bean="addrSchWsSvcImpl" />
+        </jaxws:serviceBean>
+    </jaxws:server>
+</beans>
